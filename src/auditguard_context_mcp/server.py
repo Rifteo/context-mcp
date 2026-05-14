@@ -14,7 +14,7 @@ LOCAL_CONTEXTS = os.environ.get("AUDITGUARD_CONTEXTS_PATH")
 
 mcp = FastMCP("auditguard-context-mcp")
 
-SKIP = {"find-contexts", ".github", ".gitignore", ".gitattributes", "README.md", "LICENSE"}
+SKIP = {".github", ".gitignore", ".gitattributes", "README.md", "LICENSE"}
 
 
 # ── local helpers ────────────────────────────────────────────────────────────
