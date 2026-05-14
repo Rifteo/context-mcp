@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auditguard-context-mcp"
+version = "0.1.0"
+description = "MCP server serving AuditGuard security contexts to AI agents"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "fastmcp>=2.0",
+    "httpx",
+]
+
+[project.scripts]
+auditguard-context-mcp = "auditguard_context_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
