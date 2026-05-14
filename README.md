@@ -1,6 +1,6 @@
 <div align="center">
 
-# auditguard-context-mcp
+# Auditguard Context MCP
 
 MCP server that serves [AuditGuard security contexts](https://github.com/AuditGuard-Community/contexts) to AI agents — load the right security knowledge before starting an engagement.
 
