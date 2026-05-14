@@ -4,14 +4,61 @@ MCP server that serves [AuditGuard security contexts](https://github.com/AuditGu
 
 ## Install
 
+> PyPI release coming soon. In the meantime, install from source:
+
 ```bash
-pip install auditguard-context-mcp
+git clone https://github.com/AuditGuard-Community/context-mcp
+cd context-mcp
+pip install -e .
 ```
 
-Or run without installing:
+## Register with your agent
+
+### Auto-install (all detected agents)
 
 ```bash
-uvx auditguard-context-mcp
+auditguard-context install
+```
+
+### Single agent
+
+```bash
+auditguard-context install --agent claude-code
+auditguard-context install --agent cursor
+auditguard-context install --agent gemini-cli
+```
+
+### Project-level install
+
+```bash
+auditguard-context install --agent claude-code --project
+```
+
+### See which agents are detected
+
+```bash
+auditguard-context agents
+```
+
+### Supported agents
+
+| Agent | Config location |
+|---|---|
+| `claude-code` | `~/.claude.json` (via `claude mcp add`) |
+| `cursor` | `~/.cursor/mcp.json` |
+| `windsurf` | `~/.codeium/windsurf/mcp_config.json` |
+| `gemini-cli` | `~/.gemini/settings.json` |
+| `cline` | `~/.cline/data/settings/cline_mcp_settings.json` |
+| `kiro` | `~/.kiro/settings/mcp.json` |
+| `codex` | `~/.codex/config.toml` |
+| `opencode` | `~/.config/opencode/opencode.json` |
+| `amp` | `~/.config/amp/settings.json` |
+| `continue` | `~/.continue/config.json` |
+
+### Manual install (Claude Code)
+
+```bash
+claude mcp add --scope user auditguard-contexts auditguard-context-mcp
 ```
 
 ## MCP Tools
@@ -19,30 +66,17 @@ uvx auditguard-context-mcp
 | Tool | Description |
 |---|---|
 | `list_contexts` | List all available contexts with one-line summaries |
-| `get_context` | Load a context by name (L1 overview or L2 full methodology) |
+| `get_context` | Load a context by name — L1 overview or L2 full methodology |
 | `search_contexts` | Search contexts by keyword |
 
-## Usage with Claude Code
+## Usage
 
-Add to `.claude/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "auditguard-contexts": {
-      "command": "uvx",
-      "args": ["auditguard-context-mcp"]
-    }
-  }
-}
-```
-
-Then in your agent:
+Once registered, ask your agent:
 
 ```
 list all available security contexts
-load the web-app-pentest context
-get the full methodology for cloud-audit
+get the web-app-pentest context
+load cloud-audit full methodology
 ```
 
 ## Context levels
@@ -55,6 +89,28 @@ Each context has two levels:
 ```
 get_context("web-app-pentest", level="L2")
 ```
+
+## Local development
+
+Point the server at a local clone of the contexts repo:
+
+```bash
+AUDITGUARD_CONTEXTS_PATH=/path/to/contexts auditguard-context-mcp
+```
+
+Or set it in your agent's MCP config env:
+
+```json
+{
+  "command": "auditguard-context-mcp",
+  "args": [],
+  "env": {
+    "AUDITGUARD_CONTEXTS_PATH": "/path/to/contexts"
+  }
+}
+```
+
+Without this env var the server fetches contexts live from the GitHub API.
 
 ## Part of AuditGuard
 
