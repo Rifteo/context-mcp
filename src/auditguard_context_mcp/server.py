@@ -1,6 +1,8 @@
 import os
 import re
+import sys
 import base64
+import logging
 from pathlib import Path
 
 import httpx
@@ -15,6 +17,23 @@ LOCAL_CONTEXTS = os.environ.get("AUDITGUARD_CONTEXTS_PATH")
 mcp = FastMCP("auditguard-context-mcp")
 
 SKIP = {".github", ".gitignore", ".gitattributes", "README.md", "LICENSE"}
+
+# ── logging ──────────────────────────────────────────────────────────────────
+
+_log_level = os.environ.get("AUDITGUARD_LOG_LEVEL", "INFO").upper()
+_log_file  = os.environ.get("AUDITGUARD_LOG_FILE")
+
+_handlers: list[logging.Handler] = [logging.StreamHandler(sys.stderr)]
+if _log_file:
+    _handlers.append(logging.FileHandler(_log_file, encoding="utf-8"))
+
+logging.basicConfig(
+    level=getattr(logging, _log_level, logging.INFO),
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=_handlers,
+)
+logger = logging.getLogger("auditguard-context-mcp")
 
 
 # ── local helpers ────────────────────────────────────────────────────────────
@@ -82,6 +101,7 @@ def _extract_section(content: str, level: str) -> str:
 @mcp.tool()
 async def list_contexts() -> str:
     """List all available AuditGuard security contexts with one-line summaries."""
+    logger.info("tool=list_contexts")
     names = await _list_names()
     results = []
     for name in sorted(names):
@@ -92,6 +112,7 @@ async def list_contexts() -> str:
         except Exception:
             results.append(f"- **{name}**")
 
+    logger.info(f"list_contexts returned {len(names)} context(s)")
     return "## Available Contexts\n\n" + "\n".join(results) + \
            "\n\nUse `get_context` to load a context."
 
@@ -105,18 +126,23 @@ async def get_context(name: str, level: str = "L1") -> str:
         name:  Context name (e.g. 'web-app-pentest')
         level: L1 for overview (default), L2 for full methodology
     """
+    logger.info(f"tool=get_context name={name} level={level}")
     try:
         content = await _get_content(name)
     except (FileNotFoundError, httpx.HTTPStatusError) as e:
         if isinstance(e, FileNotFoundError) or getattr(e.response, "status_code", 0) == 404:
+            logger.warning(f"get_context: context '{name}' not found")
             return f"Context '{name}' not found. Use list_contexts to see available options."
+        logger.error(f"get_context: HTTP error fetching '{name}': {e}")
         raise
 
     level = level.upper()
     if level == "L0":
         return _extract_l0(content)
     if level in ("L1", "L2"):
-        return _extract_section(content, level)
+        result = _extract_section(content, level)
+        logger.info(f"get_context: returned {level} for '{name}' ({len(result)} chars)")
+        return result
     return content
 
 
@@ -128,6 +154,7 @@ async def search_contexts(query: str) -> str:
     Args:
         query: Keyword to search for (e.g. 'jwt', 'cloud', 'android')
     """
+    logger.info(f"tool=search_contexts query={query!r}")
     names = await _list_names()
     results = []
     q = query.lower()
@@ -140,14 +167,16 @@ async def search_contexts(query: str) -> str:
         except Exception:
             pass
 
+    logger.info(f"search_contexts: {len(results)} match(es) for {query!r}")
     if not results:
         return f"No contexts found matching '{query}'."
     return f"## Contexts matching '{query}'\n\n" + "\n".join(results)
 
 
 def main():
-    mcp.run()
-
-
-if __name__ == "__main__":
-    main()
+    mode = f"local ({LOCAL_CONTEXTS})" if LOCAL_CONTEXTS else "remote (GitHub API)"
+    logger.info(f"auditguard-context-mcp starting — mode: {mode}")
+    try:
+        mcp.run()
+    except KeyboardInterrupt:
+        print("\nauditguard-context-mcp stopped.", file=sys.stderr)
