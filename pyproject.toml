@@ -18,5 +18,11 @@ dependencies = [
 auditguard-context-mcp = "auditguard_context_mcp.server:main"
 auditguard-context      = "auditguard_context_mcp.cli:main"
 
+[project.optional-dependencies]
+dev = ["ruff"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 100
