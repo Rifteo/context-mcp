@@ -2,7 +2,7 @@
 
 # Auditguard Context MCP
 
-MCP server that serves [AuditGuard security contexts](https://github.com/AuditGuard-Community/contexts) to AI agents — load the right security knowledge before starting an engagement.
+MCP server that serves [AuditGuard security contexts](https://github.com/AuditGuard-Community/contexts) to AI agents - load the right security knowledge before starting an engagement.
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![PyPI](https://img.shields.io/badge/PyPI-coming%20soon-lightgrey)](https://pypi.org/project/auditguard-context-mcp)
