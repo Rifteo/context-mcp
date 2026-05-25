@@ -2,7 +2,7 @@
 
 # Auditguard Context MCP
 
-MCP server that serves [AuditGuard security contexts](https://github.com/AuditGuard-Community/contexts) to AI agents - load the right security knowledge before starting an engagement.
+MCP server that gives AI agents live bug bounty program scope and [AuditGuard security contexts](https://github.com/AuditGuard-Community/contexts) — load the right knowledge before starting an engagement.
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![PyPI](https://img.shields.io/badge/PyPI-coming%20soon-lightgrey)](https://pypi.org/project/auditguard-context-mcp)
@@ -77,7 +77,7 @@ claude mcp add --scope user auditguard-contexts auditguard-context-mcp
 | Tool | Description |
 |---|---|
 | `list_contexts` | List all available contexts with one-line summaries |
-| `get_context` | Load a context by name — L1 overview or L2 full methodology |
+| `get_context` | Load a context by name (L1 overview or L2 full methodology) |
 | `search_contexts` | Search contexts by keyword |
 
 Once registered, ask your agent:
@@ -100,23 +100,44 @@ Each context has two levels:
 | `get_program_scope` | Fetch live scope for any bug bounty program (in-scope, out-of-scope, bounty eligibility, policy) |
 | `search_hacktivity` | Search publicly disclosed reports by vulnerability type, technology, or keyword |
 
-Connect your HackerOne account first:
+Connect your accounts:
+
+**HackerOne** — get your token at https://hackerone.com/settings/api_token/edit
 
 ```bash
 auditguard-context auth hackerone
 # HackerOne username: yourname
 # HackerOne API token: ****
-# Credentials saved to ~/.auditguard/credentials.json
 ```
+
+**Intigriti** — get your token at https://app.intigriti.com/settings/api
+
+```bash
+auditguard-context auth intigriti
+# Intigriti API token: ****
+```
+
+YesWeHack works without credentials. Immunefi has no public API.
 
 Then ask your agent:
 
 ```
-get the scope for hackerone program "tesla"
+get the scope for hackerone program "security"
+get the scope for yeswehack program "datadome-bot-bounty"
 search hacktivity for GraphQL vulnerabilities
 ```
 
-`search_hacktivity` works without credentials. `get_program_scope` requires a HackerOne API token.
+Platform support:
+
+| Platform | Scope | Auth required |
+|---|---|---|
+| `hackerone` | Full scope + policy | Yes — username + API token |
+| `bugcrowd` | Partial (public HTML only) | No (full scope coming soon) |
+| `intigriti` | Full scope | Yes — API token |
+| `yeswehack` | Full scope | No |
+| `immunefi` | Direct link | No |
+
+`search_hacktivity` searches HackerOne public disclosed reports and requires no credentials.
 
 Manage connected platforms:
 

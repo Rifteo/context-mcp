@@ -7,7 +7,7 @@ from pathlib import Path
 
 import httpx
 from fastmcp import FastMCP
-from auditguard_context_mcp.platforms import h1_get_program_scope, h1_search_hacktivity
+from auditguard_context_mcp.platforms import get_program_scope as _get_program_scope, h1_search_hacktivity, SUPPORTED_PLATFORMS
 
 REPO_OWNER   = "AuditGuard-Community"
 REPO_NAME    = "contexts"
@@ -180,17 +180,11 @@ async def get_program_scope(platform: str, program: str) -> str:
     Fetch live scope for a bug bounty program.
 
     Args:
-        platform: Platform name (e.g. 'hackerone', 'bugcrowd')
-        program:  Program handle (e.g. 'tesla', 'github')
+        platform: Platform name — hackerone, bugcrowd, intigriti, yeswehack, immunefi
+        program:  Program handle (e.g. 'tesla', 'github', 'uniswap')
     """
     logger.info(f"tool=get_program_scope platform={platform} program={program}")
-    if platform == "hackerone":
-        return await h1_get_program_scope(program)
-    return (
-        f"Platform '{platform}' is not yet supported.\n"
-        "Supported: hackerone\n"
-        "Run: auditguard-context auth hackerone"
-    )
+    return await _get_program_scope(platform, program)
 
 
 @mcp.tool()

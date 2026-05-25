@@ -10,9 +10,9 @@ PLATFORMS = {
         "help": "Get your token at https://hackerone.com/settings/api_token/edit",
     },
     "bugcrowd": {
-        "fields": ["token"],
-        "prompts": ["Bugcrowd API token: "],
-        "help": "Get your token at https://bugcrowd.com/user/api_tokens",
+        "fields": ["email", "password", "totp_secret"],
+        "prompts": ["Bugcrowd email: ", "Bugcrowd password: ", "Bugcrowd TOTP secret: "],
+        "help": "Get your credentials at https://bugcrowd.com/user/settings",
     },
     "intigriti": {
         "fields": ["token"],
