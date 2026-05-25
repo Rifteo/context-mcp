@@ -72,13 +72,13 @@ claude mcp add --scope user auditguard-contexts auditguard-context-mcp
 
 ## MCP Tools
 
+### Contexts
+
 | Tool | Description |
 |---|---|
 | `list_contexts` | List all available contexts with one-line summaries |
 | `get_context` | Load a context by name — L1 overview or L2 full methodology |
 | `search_contexts` | Search contexts by keyword |
-
-## Usage
 
 Once registered, ask your agent:
 
@@ -88,15 +88,41 @@ get the web-app-pentest context
 load cloud-audit full methodology
 ```
 
-## Context levels
-
 Each context has two levels:
 
 - **L1** — Overview and when to use (default)
 - **L2** — Full detailed methodology
 
+### Bug Bounty Platforms
+
+| Tool | Description |
+|---|---|
+| `get_program_scope` | Fetch live scope for any bug bounty program (in-scope, out-of-scope, bounty eligibility, policy) |
+| `search_hacktivity` | Search publicly disclosed reports by vulnerability type, technology, or keyword |
+
+Connect your HackerOne account first:
+
+```bash
+auditguard-context auth hackerone
+# HackerOne username: yourname
+# HackerOne API token: ****
+# Credentials saved to ~/.auditguard/credentials.json
 ```
-get_context("web-app-pentest", level="L2")
+
+Then ask your agent:
+
+```
+get the scope for hackerone program "tesla"
+search hacktivity for GraphQL vulnerabilities
+```
+
+`search_hacktivity` works without credentials. `get_program_scope` requires a HackerOne API token.
+
+Manage connected platforms:
+
+```bash
+auditguard-context auth --list
+auditguard-context auth --remove hackerone
 ```
 
 ## Local development

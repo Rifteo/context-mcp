@@ -7,6 +7,7 @@ from pathlib import Path
 
 import httpx
 from fastmcp import FastMCP
+from auditguard_context_mcp.platforms import h1_get_program_scope, h1_search_hacktivity
 
 REPO_OWNER   = "AuditGuard-Community"
 REPO_NAME    = "contexts"
@@ -171,6 +172,38 @@ async def search_contexts(query: str) -> str:
     if not results:
         return f"No contexts found matching '{query}'."
     return f"## Contexts matching '{query}'\n\n" + "\n".join(results)
+
+
+@mcp.tool()
+async def get_program_scope(platform: str, program: str) -> str:
+    """
+    Fetch live scope for a bug bounty program.
+
+    Args:
+        platform: Platform name (e.g. 'hackerone', 'bugcrowd')
+        program:  Program handle (e.g. 'tesla', 'github')
+    """
+    logger.info(f"tool=get_program_scope platform={platform} program={program}")
+    if platform == "hackerone":
+        return await h1_get_program_scope(program)
+    return (
+        f"Platform '{platform}' is not yet supported.\n"
+        "Supported: hackerone\n"
+        "Run: auditguard-context auth hackerone"
+    )
+
+
+@mcp.tool()
+async def search_hacktivity(query: str, limit: int = 10) -> str:
+    """
+    Search publicly disclosed bug bounty reports by vulnerability type, technology, or keyword.
+
+    Args:
+        query: Search term (e.g. 'SSRF', 'GraphQL', 'OAuth')
+        limit: Number of results to return (default: 10)
+    """
+    logger.info(f"tool=search_hacktivity query={query!r} limit={limit}")
+    return await h1_search_hacktivity(query, limit)
 
 
 def main():
