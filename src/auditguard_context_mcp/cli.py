@@ -4,7 +4,10 @@ import tomllib
 import tomli_w
 import argparse
 import subprocess
+import getpass
 from pathlib import Path
+from auditguard_context_mcp.credentials import PLATFORMS, set_platform, remove_platform
+from auditguard_context_mcp.platforms import PLATFORM_VERIFIERS
 
 HOME = Path.home()
 XDG  = Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config"))
@@ -184,6 +187,12 @@ def main():
     # agents
     sub.add_parser("agents", help="List detected agents on this machine")
 
+    # auth
+    p_auth = sub.add_parser("auth", help="Connect a bug bounty platform account")
+    p_auth.add_argument("platform", nargs="?", help=f"Platform to connect: {', '.join(PLATFORMS)}")
+    p_auth.add_argument("--list", action="store_true", help="Show connected platforms")
+    p_auth.add_argument("--remove", metavar="PLATFORM", help="Remove credentials for a platform")
+
     args = parser.parse_args()
 
     if args.command == "agents":
@@ -208,6 +217,61 @@ def main():
                 print(f"  [OK] {agent} -> {path}")
             except Exception as e:
                 print(f"  [FAIL] {agent} -> {e}")
+        return
+
+    if args.command == "auth":
+        if args.list:
+            from auditguard_context_mcp.credentials import load
+            data = load()
+            if not data:
+                print("No platforms connected. Run: auditguard-context auth <platform>")
+            else:
+                print("Connected platforms:")
+                for p in data:
+                    print(f"  - {p}")
+            return
+
+        if args.remove:
+            remove_platform(args.remove)
+            print(f"  Removed credentials for {args.remove}")
+            return
+
+        platform = args.platform
+        if not platform:
+            print(f"Available platforms: {', '.join(PLATFORMS)}")
+            print("Usage: auditguard-context auth <platform>")
+            return
+
+        if platform not in PLATFORMS:
+            print(f"Unknown platform '{platform}'. Available: {', '.join(PLATFORMS)}")
+            return
+
+        config = PLATFORMS[platform]
+        print(f"\n  Connecting {platform}")
+        if "help" in config:
+            print(f"  {config['help']}\n")
+
+        values = {}
+        for field, prompt in zip(config["fields"], config["prompts"]):
+            if "token" in field or "password" in field:
+                values[field] = getpass.getpass(f"  {prompt}")
+            else:
+                values[field] = input(f"  {prompt}").strip()
+
+        set_platform(platform, values)
+        print("\n  Credentials saved. Verifying...")
+
+        verifier = PLATFORM_VERIFIERS.get(platform)
+        if verifier:
+            import asyncio
+            ok, msg = asyncio.run(verifier(values))
+            if ok:
+                print(f"  {msg}")
+            else:
+                print(f"  Verification failed: {msg}")
+                print(f"  Credentials saved but may not work. Run 'auditguard-context auth {platform}' to retry.")
+        else:
+            print("  Run auditguard-context auth --list to see connected platforms.")
         return
 
     parser.print_help()
