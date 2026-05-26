@@ -7,7 +7,7 @@ from pathlib import Path
 
 import httpx
 from fastmcp import FastMCP
-from auditguard_context_mcp.platforms import get_program_scope as _get_program_scope, h1_search_hacktivity, SUPPORTED_PLATFORMS
+from auditguard_context_mcp.platforms import get_program_scope as _get_program_scope, h1_search_hacktivity
 
 REPO_OWNER   = "AuditGuard-Community"
 REPO_NAME    = "contexts"

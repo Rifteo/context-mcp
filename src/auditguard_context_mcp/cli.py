@@ -6,7 +6,7 @@ import argparse
 import subprocess
 import getpass
 from pathlib import Path
-from auditguard_context_mcp.credentials import PLATFORMS, get_platform, set_platform, remove_platform
+from auditguard_context_mcp.credentials import PLATFORMS, set_platform, remove_platform
 from auditguard_context_mcp.platforms import PLATFORM_VERIFIERS
 
 HOME = Path.home()
@@ -259,7 +259,7 @@ def main():
                 values[field] = input(f"  {prompt}").strip()
 
         set_platform(platform, values)
-        print(f"\n  Credentials saved. Verifying...")
+        print("\n  Credentials saved. Verifying...")
 
         verifier = PLATFORM_VERIFIERS.get(platform)
         if verifier:
@@ -271,7 +271,7 @@ def main():
                 print(f"  Verification failed: {msg}")
                 print(f"  Credentials saved but may not work. Run 'auditguard-context auth {platform}' to retry.")
         else:
-            print(f"  Run auditguard-context auth --list to see connected platforms.")
+            print("  Run auditguard-context auth --list to see connected platforms.")
         return
 
     parser.print_help()
