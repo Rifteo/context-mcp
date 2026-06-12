@@ -1,4 +1,4 @@
-﻿# Contributing to rifteo-context-mcp
+# Contributing to rifteo-context-mcp
 
 Thanks for contributing to the Rifteo open security toolkit.
 
