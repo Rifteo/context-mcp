@@ -1,13 +1,13 @@
-<div align="center">
+﻿<div align="center">
 
-# Auditguard Context MCP
+# Rifteo Context MCP
 
-MCP server that gives AI agents live bug bounty program scope and [AuditGuard security contexts](https://github.com/AuditGuard-Community/contexts) — load the right knowledge before starting an engagement.
+MCP server that gives AI agents live bug bounty program scope and [Rifteo security contexts](https://github.com/rifteo/contexts) — load the right knowledge before starting an engagement.
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![PyPI](https://img.shields.io/badge/PyPI-coming%20soon-lightgrey)](https://pypi.org/project/auditguard-context-mcp)
-[![Issues](https://img.shields.io/github/issues/AuditGuard-Community/context-mcp)](https://github.com/AuditGuard-Community/context-mcp/issues)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/AuditGuard-Community/context-mcp/pulls)
+[![PyPI](https://img.shields.io/badge/PyPI-coming%20soon-lightgrey)](https://pypi.org/project/rifteo-context-mcp)
+[![Issues](https://img.shields.io/github/issues/rifteo/context-mcp)](https://github.com/rifteo/context-mcp/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/rifteo/context-mcp/pulls)
 
 </div>
 
@@ -16,7 +16,7 @@ MCP server that gives AI agents live bug bounty program scope and [AuditGuard se
 > PyPI release coming soon. In the meantime, install from source:
 
 ```bash
-git clone https://github.com/AuditGuard-Community/context-mcp
+git clone https://github.com/rifteo/context-mcp
 cd context-mcp
 pip install -e .
 ```
@@ -26,27 +26,27 @@ pip install -e .
 ### Auto-install (all detected agents)
 
 ```bash
-auditguard-context install
+rifteo-context install
 ```
 
 ### Single agent
 
 ```bash
-auditguard-context install --agent claude-code
-auditguard-context install --agent cursor
-auditguard-context install --agent gemini-cli
+rifteo-context install --agent claude-code
+rifteo-context install --agent cursor
+rifteo-context install --agent gemini-cli
 ```
 
 ### Project-level install
 
 ```bash
-auditguard-context install --agent claude-code --project
+rifteo-context install --agent claude-code --project
 ```
 
 ### See which agents are detected
 
 ```bash
-auditguard-context agents
+rifteo-context agents
 ```
 
 ### Supported agents
@@ -67,7 +67,7 @@ auditguard-context agents
 ### Manual install (Claude Code)
 
 ```bash
-claude mcp add --scope user auditguard-contexts auditguard-context-mcp
+claude mcp add --scope user rifteo-contexts rifteo-context-mcp
 ```
 
 ## MCP Tools
@@ -105,7 +105,7 @@ Connect your accounts:
 **HackerOne** — get your token at https://hackerone.com/settings/api_token/edit
 
 ```bash
-auditguard-context auth hackerone
+rifteo-context auth hackerone
 # HackerOne username: yourname
 # HackerOne API token: ****
 ```
@@ -113,7 +113,7 @@ auditguard-context auth hackerone
 **Intigriti** — get your token at https://app.intigriti.com/settings/api
 
 ```bash
-auditguard-context auth intigriti
+rifteo-context auth intigriti
 # Intigriti API token: ****
 ```
 
@@ -142,8 +142,8 @@ Platform support:
 Manage connected platforms:
 
 ```bash
-auditguard-context auth --list
-auditguard-context auth --remove hackerone
+rifteo-context auth --list
+rifteo-context auth --remove hackerone
 ```
 
 ## Local development
@@ -151,26 +151,26 @@ auditguard-context auth --remove hackerone
 Point the server at a local clone of the contexts repo:
 
 ```bash
-AUDITGUARD_CONTEXTS_PATH=/path/to/contexts auditguard-context-mcp
+RIFTEO_CONTEXTS_PATH=/path/to/contexts rifteo-context-mcp
 ```
 
 Or set it in your agent's MCP config env:
 
 ```json
 {
-  "command": "auditguard-context-mcp",
+  "command": "rifteo-context-mcp",
   "args": [],
   "env": {
-    "AUDITGUARD_CONTEXTS_PATH": "/path/to/contexts"
+    "RIFTEO_CONTEXTS_PATH": "/path/to/contexts"
   }
 }
 ```
 
 Without this env var the server fetches contexts live from the GitHub API.
 
-## Part of AuditGuard
+## Part of Rifteo
 
-Part of the [AuditGuard](https://github.com/AuditGuard-Community) open security toolkit.
+Part of the [Rifteo](https://github.com/rifteo) open security toolkit.
 
 ## License
 

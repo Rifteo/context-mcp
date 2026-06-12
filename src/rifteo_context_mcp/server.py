@@ -1,4 +1,4 @@
-import os
+﻿import os
 import re
 import sys
 import base64
@@ -7,22 +7,22 @@ from pathlib import Path
 
 import httpx
 from fastmcp import FastMCP
-from auditguard_context_mcp.platforms import get_program_scope as _get_program_scope, h1_search_hacktivity
+from rifteo_context_mcp.platforms import get_program_scope as _get_program_scope, h1_search_hacktivity
 
-REPO_OWNER   = "AuditGuard-Community"
+REPO_OWNER   = "rifteo"
 REPO_NAME    = "contexts"
 API_BASE     = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents"
-HEADERS      = {"User-Agent": "auditguard-context-mcp"}
-LOCAL_CONTEXTS = os.environ.get("AUDITGUARD_CONTEXTS_PATH")
+HEADERS      = {"User-Agent": "rifteo-context-mcp"}
+LOCAL_CONTEXTS = os.environ.get("RIFTEO_CONTEXTS_PATH")
 
-mcp = FastMCP("auditguard-context-mcp")
+mcp = FastMCP("rifteo-context-mcp")
 
 SKIP = {".github", ".gitignore", ".gitattributes", "README.md", "LICENSE"}
 
 # ── logging ──────────────────────────────────────────────────────────────────
 
-_log_level = os.environ.get("AUDITGUARD_LOG_LEVEL", "INFO").upper()
-_log_file  = os.environ.get("AUDITGUARD_LOG_FILE")
+_log_level = os.environ.get("RIFTEO_LOG_LEVEL", "INFO").upper()
+_log_file  = os.environ.get("RIFTEO_LOG_FILE")
 
 _handlers: list[logging.Handler] = [logging.StreamHandler(sys.stderr)]
 if _log_file:
@@ -34,7 +34,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=_handlers,
 )
-logger = logging.getLogger("auditguard-context-mcp")
+logger = logging.getLogger("rifteo-context-mcp")
 
 
 # ── local helpers ────────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ def _extract_section(content: str, level: str) -> str:
 
 @mcp.tool()
 async def list_contexts() -> str:
-    """List all available AuditGuard security contexts with one-line summaries."""
+    """List all available Rifteo security contexts with one-line summaries."""
     logger.info("tool=list_contexts")
     names = await _list_names()
     results = []
@@ -202,8 +202,8 @@ async def search_hacktivity(query: str, limit: int = 10) -> str:
 
 def main():
     mode = f"local ({LOCAL_CONTEXTS})" if LOCAL_CONTEXTS else "remote (GitHub API)"
-    logger.info(f"auditguard-context-mcp starting — mode: {mode}")
+    logger.info(f"rifteo-context-mcp starting — mode: {mode}")
     try:
         mcp.run()
     except KeyboardInterrupt:
-        print("\nauditguard-context-mcp stopped.", file=sys.stderr)
+        print("\nrifteo-context-mcp stopped.", file=sys.stderr)

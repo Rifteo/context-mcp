@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-CREDENTIALS_FILE = Path.home() / ".auditguard" / "credentials.json"
+CREDENTIALS_FILE = Path.home() / ".rifteo" / "credentials.json"
 
 PLATFORMS = {
     "hackerone": {
