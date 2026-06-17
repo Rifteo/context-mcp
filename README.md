@@ -5,7 +5,7 @@
 MCP server that gives AI agents live bug bounty program scope and [Rifteo security contexts](https://github.com/rifteo/contexts) — load the right knowledge before starting an engagement.
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![PyPI](https://img.shields.io/badge/PyPI-coming%20soon-lightgrey)](https://pypi.org/project/rifteo-context-mcp)
+[![PyPI](https://img.shields.io/pypi/v/rifteo-context-mcp)](https://pypi.org/project/rifteo-context-mcp)
 [![Issues](https://img.shields.io/github/issues/rifteo/context-mcp)](https://github.com/rifteo/context-mcp/issues)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/rifteo/context-mcp/pulls)
 
@@ -13,7 +13,11 @@ MCP server that gives AI agents live bug bounty program scope and [Rifteo securi
 
 ## Install
 
-> PyPI release coming soon. In the meantime, install from source:
+```bash
+pip install rifteo-context-mcp
+```
+
+Or from source:
 
 ```bash
 git clone https://github.com/rifteo/context-mcp
