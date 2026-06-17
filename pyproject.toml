@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "rifteo-context-mcp"
 version = "0.1.0"
 description = "MCP server serving Rifteo security contexts to AI agents"
+readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
