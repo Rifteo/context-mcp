@@ -3,14 +3,14 @@ import re
 import base64
 import httpx
 from html import unescape as html_unescape
-from auditguard_context_mcp.credentials import get_platform
+from rifteo_context_mcp.credentials import get_platform
 
 H1_API_BASE = "https://api.hackerone.com/v1"
 INTIGRITI_API_BASE = "https://api.intigriti.com/core/researcher/v1"
 YWH_API_BASE = "https://api.yeswehack.com"
 IMMUNEFI_API_BASE = "https://immunefi.com/api"
 
-_UA = "auditguard-context-mcp"
+_UA = "rifteo-context-mcp"
 
 
 # ── HackerOne ─────────────────────────────────────────────────────────────────
@@ -28,7 +28,7 @@ def _h1_headers() -> dict | None:
 async def h1_get_program_scope(program: str) -> str:
     headers = _h1_headers()
     if not headers:
-        return "HackerOne credentials not configured.\nRun: auditguard-context auth hackerone"
+        return "HackerOne credentials not configured.\nRun: rifteo-context auth hackerone"
 
     async with httpx.AsyncClient() as client:
         prog_r = await client.get(f"{H1_API_BASE}/hackers/programs/{program}", headers=headers)
@@ -39,7 +39,7 @@ async def h1_get_program_scope(program: str) -> str:
         )
 
     if prog_r.status_code == 401:
-        return "HackerOne authentication failed.\nRun: auditguard-context auth hackerone"
+        return "HackerOne authentication failed.\nRun: rifteo-context auth hackerone"
     if prog_r.status_code == 404:
         return f"Program '{program}' not found on HackerOne."
     prog_r.raise_for_status()
@@ -186,7 +186,7 @@ async def bc_get_program_scope(program: str) -> str:
             lines.append(f"- {asset}")
     else:
         lines.append("\nScope not publicly visible. Authentication required for full scope.")
-        lines.append("Run: auditguard-context auth bugcrowd")
+        lines.append("Run: rifteo-context auth bugcrowd")
 
     return "\n".join(lines)
 
@@ -204,7 +204,7 @@ def _intigriti_headers() -> dict | None:
 async def intigriti_get_program_scope(program: str) -> str:
     headers = _intigriti_headers()
     if not headers:
-        return "Intigriti credentials not configured.\nRun: auditguard-context auth intigriti"
+        return "Intigriti credentials not configured.\nRun: rifteo-context auth intigriti"
 
     async with httpx.AsyncClient() as client:
         r = await client.get(
@@ -213,7 +213,7 @@ async def intigriti_get_program_scope(program: str) -> str:
         )
 
     if r.status_code == 401:
-        return "Intigriti authentication failed.\nRun: auditguard-context auth intigriti"
+        return "Intigriti authentication failed.\nRun: rifteo-context auth intigriti"
     if r.status_code == 404:
         return f"Program '{program}' not found on Intigriti."
     r.raise_for_status()

@@ -29,4 +29,4 @@ jobs:
       - name: Install package
         run: pip install -e .
       - name: Import check
-        run: python -c "from auditguard_context_mcp.server import mcp; from auditguard_context_mcp.cli import main; print('OK')"
+        run: python -c "from rifteo_context_mcp.server import mcp; from rifteo_context_mcp.cli import main; print('OK')"

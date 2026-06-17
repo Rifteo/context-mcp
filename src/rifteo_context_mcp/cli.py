@@ -6,14 +6,14 @@ import argparse
 import subprocess
 import getpass
 from pathlib import Path
-from auditguard_context_mcp.credentials import PLATFORMS, set_platform, remove_platform
-from auditguard_context_mcp.platforms import PLATFORM_VERIFIERS
+from rifteo_context_mcp.credentials import PLATFORMS, set_platform, remove_platform
+from rifteo_context_mcp.platforms import PLATFORM_VERIFIERS
 
 HOME = Path.home()
 XDG  = Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config"))
 
 MCP_ENTRY = {
-    "command": "auditguard-context-mcp",
+    "command": "rifteo-context-mcp",
     "args": [],
 }
 
@@ -125,7 +125,7 @@ def _install_toml(path: Path, entry_name: str):
 
     servers = data.setdefault("mcp_servers", [])
     if not any(s.get("name") == entry_name for s in servers):
-        servers.append({"name": entry_name, "command": "auditguard-context-mcp", "args": []})
+        servers.append({"name": entry_name, "command": "rifteo-context-mcp", "args": []})
 
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "wb") as f:
@@ -135,13 +135,13 @@ def _install_toml(path: Path, entry_name: str):
 def _install_claude_code(entry_name: str, scope: str = "user"):
     # Claude Code stores MCP config in ~/.claude.json; use the CLI to register correctly.
     # Valid scopes: user (global), project (current dir .claude/settings.json)
-    cmd = ["claude", "mcp", "add", "--transport", "stdio", "--scope", scope, entry_name, "auditguard-context-mcp"]
+    cmd = ["claude", "mcp", "add", "--transport", "stdio", "--scope", scope, entry_name, "rifteo-context-mcp"]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or f"claude mcp add exited {result.returncode}")
 
 
-def install_agent(agent_name: str, entry_name: str = "auditguard-contexts", project: bool = False):
+def install_agent(agent_name: str, entry_name: str = "rifteo-contexts", project: bool = False):
     entry = AGENTS.get(agent_name)
     if not entry:
         raise ValueError(f"Unknown agent '{agent_name}'")
@@ -174,8 +174,8 @@ def install_agent(agent_name: str, entry_name: str = "auditguard-contexts", proj
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="auditguard-context",
-        description="Manage auditguard-context-mcp across AI agents",
+        prog="rifteo-context",
+        description="Manage rifteo-context-mcp across AI agents",
     )
     sub = parser.add_subparsers(dest="command")
 
@@ -221,10 +221,10 @@ def main():
 
     if args.command == "auth":
         if args.list:
-            from auditguard_context_mcp.credentials import load
+            from rifteo_context_mcp.credentials import load
             data = load()
             if not data:
-                print("No platforms connected. Run: auditguard-context auth <platform>")
+                print("No platforms connected. Run: rifteo-context auth <platform>")
             else:
                 print("Connected platforms:")
                 for p in data:
@@ -239,7 +239,7 @@ def main():
         platform = args.platform
         if not platform:
             print(f"Available platforms: {', '.join(PLATFORMS)}")
-            print("Usage: auditguard-context auth <platform>")
+            print("Usage: rifteo-context auth <platform>")
             return
 
         if platform not in PLATFORMS:
@@ -269,9 +269,9 @@ def main():
                 print(f"  {msg}")
             else:
                 print(f"  Verification failed: {msg}")
-                print(f"  Credentials saved but may not work. Run 'auditguard-context auth {platform}' to retry.")
+                print(f"  Credentials saved but may not work. Run 'rifteo-context auth {platform}' to retry.")
         else:
-            print("  Run auditguard-context auth --list to see connected platforms.")
+            print("  Run rifteo-context auth --list to see connected platforms.")
         return
 
     parser.print_help()
