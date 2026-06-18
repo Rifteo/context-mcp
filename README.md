@@ -2,7 +2,7 @@
 
 # Rifteo Context MCP
 
-MCP server that gives AI agents live bug bounty program scope and [Rifteo security contexts](https://github.com/rifteo/contexts) — load the right knowledge before starting an engagement.
+MCP server that gives AI agents live bug bounty program scope and [Rifteo security contexts](https://github.com/rifteo/contexts) - load the right knowledge before starting an engagement.
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/rifteo-context-mcp)](https://pypi.org/project/rifteo-context-mcp)
@@ -94,8 +94,8 @@ load cloud-audit full methodology
 
 Each context has two levels:
 
-- **L1** — Overview and when to use (default)
-- **L2** — Full detailed methodology
+- **L1** - Overview and when to use (default)
+- **L2** - Full detailed methodology
 
 ### Bug Bounty Platforms
 
@@ -106,7 +106,7 @@ Each context has two levels:
 
 Connect your accounts:
 
-**HackerOne** — get your token at https://hackerone.com/settings/api_token/edit
+**HackerOne** - get your token at https://hackerone.com/settings/api_token/edit
 
 ```bash
 rifteo-context auth hackerone
@@ -114,7 +114,7 @@ rifteo-context auth hackerone
 # HackerOne API token: ****
 ```
 
-**Intigriti** — get your token at https://app.intigriti.com/settings/api
+**Intigriti** - get your token at https://app.intigriti.com/settings/api
 
 ```bash
 rifteo-context auth intigriti
@@ -135,9 +135,9 @@ Platform support:
 
 | Platform | Scope | Auth required |
 |---|---|---|
-| `hackerone` | Full scope + policy | Yes — username + API token |
+| `hackerone` | Full scope + policy | Yes - username + API token |
 | `bugcrowd` | Partial (public HTML only) | No (full scope coming soon) |
-| `intigriti` | Full scope | Yes — API token |
+| `intigriti` | Full scope | Yes - API token |
 | `yeswehack` | Full scope | No |
 | `immunefi` | Direct link | No |
 
